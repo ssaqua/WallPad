@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_navigation_height">56dp</dimen>
+    <dimen name="collection_content_inset">8dp</dimen>
+    <dimen name="collection_card_spacing">8dp</dimen>
+    <dimen name="collection_text_size">22dp</dimen>
+    <dimen name="opaque_scrim_height">48dp</dimen>
+    <dimen name="scrim_padding">12dp</dimen>
+    <dimen name="gallery_content_inset">4dp</dimen>
+    <dimen name="gallery_card_spacing">4dp</dimen>
+    <dimen name="saved_card_spacing">8dp</dimen>
+    <dimen name="saved_content_inset">8dp</dimen>
+</resources>

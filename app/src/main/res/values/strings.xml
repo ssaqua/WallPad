@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">WallPad</string>
+    <string name="navigation_collections">Collections</string>
+    <string name="navigation_search">Search</string>
+    <string name="navigation_search_empty_label">Search</string>
+    <string name="navigation_saved">Saved</string>
+    <string name="search_hint">Search</string>
+    <string name="search_title">Search</string>
+    <string name="set_wallpaper_title">Wallpaper</string>
+    <string name="save_title">Save</string>
+    <string name="collections_error">Could not retrieve collections, try again later.</string>
+    <string name="collections_empty">No collections found.</string>
+    <string name="gallery_empty">No images found.</string>
+    <string name="gallery_error">Could not retrieve any images.</string>
+    <string name="toast_photo_viewer_load_failure">Failed to load image</string>
+    <string name="set_wallpaper_dialog_message">Set this image as your home screen wallpaper?</string>
+    <string name="set_wallpaper_positive_text">Set</string>
+    <string name="set_wallpaper_negative_text">Cancel</string>
+    <string name="saved_empty">No saved wallpapers :(\ntry bookmarking some of\nyour favorite wallpapers.</string>
+    <string name="toast_photo_viewer_saved">Saved!</string>
+    <string name="delete_title">Delete</string>
+</resources>

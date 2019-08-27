@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ss.wallpad.widget.SquareCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/collection_card_spacing">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:id="@+id/scrim"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/opaque_scrim_height"
+        android:layout_gravity="bottom"
+        android:visibility="gone"
+        android:background="@color/opaqueScrim" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/text_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/opaque_scrim_height"
+        android:layout_gravity="bottom"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/collection_text_size"
+        android:visibility="gone"
+        tools:ignore="SpUsage" />
+
+</ss.wallpad.widget.SquareCardView>

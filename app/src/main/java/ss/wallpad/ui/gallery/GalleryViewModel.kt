@@ -13,8 +13,10 @@ import ss.wallpad.data.Status
 import ss.wallpad.data.model.Image
 import ss.wallpad.data.model.Images
 import ss.wallpad.data.remote.BingImageSearchService
+import ss.wallpad.testing.OpenForTesting
 import javax.inject.Inject
 
+@OpenForTesting
 class GalleryViewModel @Inject constructor(
     private val service: BingImageSearchService
 ) : ViewModel() {

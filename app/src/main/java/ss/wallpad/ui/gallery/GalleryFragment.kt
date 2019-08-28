@@ -22,6 +22,7 @@ import ss.wallpad.Injectable
 import ss.wallpad.R
 import ss.wallpad.data.Status
 import ss.wallpad.data.model.Image
+import ss.wallpad.testing.OpenForTesting
 import ss.wallpad.util.SingleVisibleViewGrouping
 import ss.wallpad.widget.VerticalGridMarginItemDecoration
 import javax.inject.Inject
@@ -29,6 +30,7 @@ import javax.inject.Inject
 const val SPAN_COUNT_PORTRAIT = 3
 const val SPAN_COUNT_LANDSCAPE = 5
 
+@OpenForTesting
 class GalleryFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -39,8 +41,6 @@ class GalleryFragment : Fragment(), Injectable {
     }
 
     private val params by navArgs<GalleryFragmentArgs>()
-
-    private val navController by lazy { findNavController() }
 
     private lateinit var viewGrouping: SingleVisibleViewGrouping
 
@@ -113,12 +113,17 @@ class GalleryFragment : Fragment(), Injectable {
         // for reference: IllegalArgumentException navigation destination ___ is unknown to this NavController
         // workaround for common issue with navigation component where currentDestination
         // gets a delayed update, not really an elegant solution here...
-        if (navController.currentDestination?.id == R.id.galleryFragment) {
+        if (navController().currentDestination?.id == R.id.galleryFragment) {
             ViewCompat.setTransitionName(imageView, image.imageId)
-            navController.navigate(
+            navController().navigate(
                 GalleryFragmentDirections.photoViewer(image),
                 FragmentNavigatorExtras(imageView to image.imageId)
             )
         }
     }
+
+    /**
+     * Overridable for tests
+     */
+    fun navController() = findNavController()
 }

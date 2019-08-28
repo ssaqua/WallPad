@@ -36,8 +36,8 @@ import ss.wallpad.mock
 @LooperMode(LooperMode.Mode.PAUSED)
 class CollectionFragmentTest {
     val mockCollectionViewModel: CollectionViewModel = mock()
-    val mockCollections = MutableLiveData<Resource<List<Collection>>>()
 
+    val collectionsLiveData = MutableLiveData<Resource<List<Collection>>>()
     val testCollections = listOf(
         Collection("mock_1", "http://example.com/mock_image_1.jpg"),
         Collection("mock_2", "http://example.com/mock_image_2.jpg"),
@@ -58,7 +58,7 @@ class CollectionFragmentTest {
 
     @Before
     fun setUp() {
-        `when`(mockCollectionViewModel.collections).thenReturn(mockCollections)
+        `when`(mockCollectionViewModel.collections).thenReturn(collectionsLiveData)
         scenario = launchFragmentInContainer(themeResId = R.style.AppTheme) {
             val mockViewModelFactory: ViewModelProvider.Factory = mock()
             `when`(mockViewModelFactory.create(CollectionViewModel::class.java))
@@ -69,7 +69,7 @@ class CollectionFragmentTest {
 
     @Test
     fun progressBarVisible_onLoadingStatus() {
-        mockCollections.postValue(Resource(Status.LOADING))
+        collectionsLiveData.postValue(Resource(Status.LOADING))
 
         onView(withId(R.id.progress_bar)).check(matches(isDisplayed()))
         onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())))
@@ -79,7 +79,7 @@ class CollectionFragmentTest {
 
     @Test
     fun emptyTextVisible_onSuccessNull() {
-        mockCollections.postValue(Resource(Status.SUCCESS, null))
+        collectionsLiveData.postValue(Resource(Status.SUCCESS, null))
 
         onView(withId(R.id.empty_text)).check(matches(isDisplayed()))
         onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())))
@@ -89,7 +89,7 @@ class CollectionFragmentTest {
 
     @Test
     fun emptyTextVisible_onSuccessEmptyList() {
-        mockCollections.postValue(Resource(Status.SUCCESS, emptyList()))
+        collectionsLiveData.postValue(Resource(Status.SUCCESS, emptyList()))
 
         onView(withId(R.id.empty_text)).check(matches(isDisplayed()))
         onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())))
@@ -99,7 +99,7 @@ class CollectionFragmentTest {
 
     @Test
     fun errorTextVisible_onErrorStatus() {
-        mockCollections.postValue(Resource(Status.ERROR))
+        collectionsLiveData.postValue(Resource(Status.ERROR))
 
         onView(withId(R.id.error_text)).check(matches(isDisplayed()))
         onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())))
@@ -109,7 +109,7 @@ class CollectionFragmentTest {
 
     @Test
     fun collectionRecyclerViewVisible_onSuccessCollections() {
-        mockCollections.postValue(Resource(Status.SUCCESS, testCollections))
+        collectionsLiveData.postValue(Resource(Status.SUCCESS, testCollections))
 
         onView(withId(R.id.collection_recycler_view)).check(matches(isDisplayed()))
         onView(withId(R.id.progress_bar)).check(matches(not(isDisplayed())))
@@ -129,7 +129,7 @@ class CollectionFragmentTest {
 
     @Test
     fun clickCollectionItems_navigatesToGallery() {
-        mockCollections.postValue(Resource(Status.SUCCESS, testCollections))
+        collectionsLiveData.postValue(Resource(Status.SUCCESS, testCollections))
 
         testCollections.forEachIndexed { index, collection ->
             onView(withId(R.id.collection_recycler_view))

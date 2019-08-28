@@ -59,7 +59,7 @@ class CollectionFragmentTest {
     @Before
     fun setUp() {
         `when`(mockCollectionViewModel.collections).thenReturn(mockCollections)
-        scenario = launchFragmentInContainer {
+        scenario = launchFragmentInContainer(themeResId = R.style.AppTheme) {
             val mockViewModelFactory: ViewModelProvider.Factory = mock()
             `when`(mockViewModelFactory.create(CollectionViewModel::class.java))
                 .thenReturn(mockCollectionViewModel)

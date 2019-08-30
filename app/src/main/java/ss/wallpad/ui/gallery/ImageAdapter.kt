@@ -33,7 +33,6 @@ class ImageAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val thumbnailUrl = images[position].thumbnailUrl
-        val contentUrl = images[position].contentUrl
         holder.imageView.transitionName = images[position].imageId
         requestManager
             .load(thumbnailUrl)
@@ -42,9 +41,6 @@ class ImageAdapter(
         holder.itemView.setOnClickListener {
             callback?.invoke(holder.imageView, images[position])
         }
-        // pre-cache the full size image to disk, not necessarily a good
-        // strategy if we were to have auto-fetch on scroll feature in the future
-        requestManager.downloadOnly().load(contentUrl).submit()
     }
 
     override fun onViewRecycled(holder: ViewHolder) {

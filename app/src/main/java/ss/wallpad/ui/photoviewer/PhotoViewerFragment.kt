@@ -26,6 +26,7 @@ import androidx.transition.ChangeBounds
 import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import dagger.android.support.AndroidSupportInjection
@@ -84,18 +85,16 @@ class PhotoViewerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         photo_view.transitionName = params.image.imageId
-        // for future improvement: load the thumbnail image from cache instead of the content URL
-        // the postponed enter transition can be started much quicker in case Glide is still
-        // fetching in the background, currently there could be delay between clicking an image in the
-        // image grid to the detail view depending on if the image had been fully pre-cached or not
+        val thumbnailRequestBuilder = Glide.with(this)
+            .asBitmap()
+            .load(params.image.thumbnailUrl)
         Glide.with(this)
             .asBitmap()
             .load(params.image.contentUrl)
+            .thumbnail(thumbnailRequestBuilder)
             .into(object : CustomViewTarget<ImageView, Bitmap>(photo_view) {
                 override fun onLoadFailed(errorDrawable: Drawable?) {
-                    Toast.makeText(
-                        context, R.string.toast_photo_viewer_load_failure, Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(context, R.string.toast_photo_viewer_load_failure, Toast.LENGTH_LONG).show()
                 }
 
                 override fun onResourceCleared(placeholder: Drawable?) {

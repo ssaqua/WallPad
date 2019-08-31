@@ -29,6 +29,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.android.synthetic.main.photo_viewer_fragment.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import ss.wallpad.Injectable
 import ss.wallpad.R
 import ss.wallpad.data.SavedImageStore
@@ -45,7 +47,6 @@ class PhotoViewerFragment : Fragment(), Injectable {
             .getSystemService(Context.WALLPAPER_SERVICE) as WallpaperManager
     }
 
-    private val bitmapKey = "bitmap"
     private var bitmap: Bitmap? = null
 
     @Inject
@@ -56,7 +57,6 @@ class PhotoViewerFragment : Fragment(), Injectable {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        bitmap = savedInstanceState?.getParcelable(bitmapKey)
         setHasOptionsMenu(true)
         postponeEnterTransition()
         setEnterSharedElementCallback(object : SharedElementCallback() {
@@ -120,24 +120,10 @@ class PhotoViewerFragment : Fragment(), Injectable {
                 Toast.makeText(context, R.string.toast_photo_viewer_saved, Toast.LENGTH_LONG).show()
                 true
             }
-            R.id.action_set_wallpaper -> bitmap?.let {
-                AlertDialog.Builder(requireContext())
-                    .setMessage(R.string.set_wallpaper_dialog_message)
-                    .setPositiveButton(R.string.set_wallpaper_positive_text) { dialog, _ ->
-                        // dismiss the dialog first since we are on the main thread,
-                        // setting the bitmap would ideally be done in the background
-                        dialog.dismiss()
-                        val displayManager = requireActivity().getDisplayMetrics()
-                        wallpaperManager.suggestDesiredDimensions(
-                            displayManager.widthPixels,
-                            displayManager.heightPixels
-                        )
-                        wallpaperManager.setBitmap(it)
-                    }
-                    .setNegativeButton(R.string.set_wallpaper_negative_text) { _, _ -> }
-                    .show()
+            R.id.action_set_wallpaper -> {
+                bitmap?.let { showWallpaperConfirmationDialog() }
                 true
-            } ?: true
+            }
             R.id.action_delete -> {
                 savedImageStore.delete(params.image)
                 findNavController().navigateUp()
@@ -145,11 +131,6 @@ class PhotoViewerFragment : Fragment(), Injectable {
             }
             else -> false
         }
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putParcelable(bitmapKey, bitmap)
-        super.onSaveInstanceState(outState)
     }
 
     private fun animateBackground() {
@@ -167,6 +148,28 @@ class PhotoViewerFragment : Fragment(), Injectable {
                     Color.BLACK
                 ).start()
             }
+        }
+    }
+
+    private fun showWallpaperConfirmationDialog() {
+        AlertDialog.Builder(requireContext())
+            .setMessage(R.string.set_wallpaper_dialog_message)
+            .setPositiveButton(R.string.set_wallpaper_positive_text) { dialog, _ ->
+                dialog.dismiss()
+                setWallpaper()
+            }
+            .setNegativeButton(R.string.set_wallpaper_negative_text) { _, _ -> }
+            .show()
+    }
+
+    private fun setWallpaper() {
+        bitmap?.let {
+            val displayManager = requireActivity().getDisplayMetrics()
+            wallpaperManager.suggestDesiredDimensions(
+                displayManager.widthPixels,
+                displayManager.heightPixels
+            )
+            GlobalScope.launch { wallpaperManager.setBitmap(it) }
         }
     }
 }

@@ -26,17 +26,16 @@ import androidx.transition.ChangeBounds
 import androidx.transition.ChangeTransform
 import androidx.transition.TransitionSet
 import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.request.target.CustomViewTarget
 import com.bumptech.glide.request.transition.Transition
-import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.photo_viewer_fragment.*
+import ss.wallpad.Injectable
 import ss.wallpad.R
 import ss.wallpad.data.SavedImageStore
 import ss.wallpad.util.getDisplayMetrics
 import javax.inject.Inject
 
-class PhotoViewerFragment : Fragment() {
+class PhotoViewerFragment : Fragment(), Injectable {
 
     private val params by navArgs<PhotoViewerFragmentArgs>()
 
@@ -51,11 +50,6 @@ class PhotoViewerFragment : Fragment() {
 
     @Inject
     lateinit var savedImageStore: SavedImageStore
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

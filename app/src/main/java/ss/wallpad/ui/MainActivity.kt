@@ -66,7 +66,7 @@ class MainActivity : AppCompatActivity(), HasSupportFragmentInjector {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         if (intent.action == Intent.ACTION_SEARCH) {
-            intent.getStringExtra(SearchManager.QUERY)?.also { query ->
+            intent.getStringExtra(SearchManager.QUERY)?.let { query ->
                 navController.navigate(NavGraphDirections.openGallery(query))
             }
         }

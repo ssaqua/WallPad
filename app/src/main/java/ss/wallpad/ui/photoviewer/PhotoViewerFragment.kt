@@ -37,7 +37,7 @@ import javax.inject.Inject
 
 class PhotoViewerFragment : Fragment(), Injectable {
 
-    private val params by navArgs<PhotoViewerFragmentArgs>()
+    private val params: PhotoViewerFragmentArgs by navArgs()
 
     private val wallpaperManager by lazy {
         requireContext()

@@ -29,7 +29,7 @@ import ss.wallpad.data.Status
 import ss.wallpad.data.model.Collection
 import ss.wallpad.espresso.matcher.atPosition
 import ss.wallpad.espresso.matcher.hasItemCount
-import ss.wallpad.mock
+import ss.wallpad.util.mock
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = TestApplication::class)

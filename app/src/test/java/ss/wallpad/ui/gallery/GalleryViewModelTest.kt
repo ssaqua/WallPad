@@ -10,13 +10,13 @@ import org.mockito.Mockito.verifyZeroInteractions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ss.wallpad.any
+import ss.wallpad.util.any
 import ss.wallpad.data.Resource
 import ss.wallpad.data.Status
 import ss.wallpad.data.model.Image
 import ss.wallpad.data.model.Images
 import ss.wallpad.data.remote.BingImageSearchService
-import ss.wallpad.mock
+import ss.wallpad.util.mock
 import java.net.SocketTimeoutException
 
 class GalleryViewModelTest {

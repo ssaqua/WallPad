@@ -12,14 +12,14 @@ import org.mockito.Mockito.verifyZeroInteractions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ss.wallpad.any
+import ss.wallpad.util.any
 import ss.wallpad.data.Resource
 import ss.wallpad.data.Status
 import ss.wallpad.data.TimeProvider
 import ss.wallpad.data.local.Cache
 import ss.wallpad.data.model.Collection
 import ss.wallpad.data.remote.CollectionService
-import ss.wallpad.mock
+import ss.wallpad.util.mock
 import java.net.SocketTimeoutException
 
 class CollectionRepositoryTest {

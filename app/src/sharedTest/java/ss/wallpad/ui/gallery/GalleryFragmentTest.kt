@@ -29,14 +29,14 @@ import org.robolectric.annotation.Config
 import org.robolectric.annotation.LooperMode
 import ss.wallpad.R
 import ss.wallpad.TestApplication
-import ss.wallpad.any
 import ss.wallpad.data.Resource
 import ss.wallpad.data.Status
 import ss.wallpad.data.model.Image
 import ss.wallpad.espresso.matcher.atPosition
 import ss.wallpad.espresso.matcher.hasItemCount
 import ss.wallpad.espresso.matcher.hasTransitionName
-import ss.wallpad.mock
+import ss.wallpad.util.any
+import ss.wallpad.util.mock
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = TestApplication::class)
@@ -147,7 +147,10 @@ class GalleryFragmentTest {
                 .perform(actionOnItemAtPosition<RecyclerView.ViewHolder>(index, click()))
             scenario.onFragment { fragment ->
                 verify(fragment.navController())
-                    .navigate(eq(GalleryFragmentDirections.photoViewer(image)), any<Navigator.Extras>())
+                    .navigate(
+                        eq(GalleryFragmentDirections.photoViewer(image)),
+                        any<Navigator.Extras>()
+                    )
             }
         }
     }

@@ -1,4 +1,4 @@
-package ss.wallpad
+package ss.wallpad.util
 
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito

@@ -8,7 +8,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.NO_POSITION
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -20,7 +22,7 @@ import ss.wallpad.data.model.Collection
 
 class CollectionAdapter(
     private val requestManager: RequestManager,
-    private val collections: List<Collection>,
+    private val collections: MutableList<Collection> = mutableListOf(),
     private val callback: ((Collection) -> Unit)?
 ) : RecyclerView.Adapter<CollectionAdapter.ViewHolder>() {
     private val requestOptions = RequestOptions().apply {
@@ -36,7 +38,12 @@ class CollectionAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val cardView = LayoutInflater.from(parent.context)
             .inflate(R.layout.collection_cardview, parent, false) as CardView
-        return ViewHolder(cardView)
+        val viewHolder = ViewHolder(cardView)
+        viewHolder.itemView.setOnClickListener {
+            val position = viewHolder.adapterPosition
+            if (position != NO_POSITION) callback?.invoke(collections[position])
+        }
+        return viewHolder
     }
 
     override fun getItemCount(): Int = collections.size
@@ -53,14 +60,18 @@ class CollectionAdapter(
                 holder.textView.visibility = View.VISIBLE
             })
             .into(holder.imageView)
-        holder.itemView.setOnClickListener {
-            callback?.invoke(collections[position])
-        }
     }
 
     override fun onViewRecycled(holder: ViewHolder) {
         super.onViewRecycled(holder)
         requestManager.clear(holder.imageView)
+    }
+
+    fun replaceCollections(collections: List<Collection>) {
+        val diffResult = DiffUtil.calculateDiff(CollectionDiffCallback(this.collections, collections))
+        this.collections.clear()
+        this.collections.addAll(collections)
+        diffResult.dispatchUpdatesTo(this)
     }
 }
 
@@ -81,5 +92,22 @@ private class ImageRequestListener(private val onReady: () -> Unit) : RequestLis
     ): Boolean {
         onReady()
         return false
+    }
+}
+
+private class CollectionDiffCallback(
+    private val oldCollections: List<Collection>,
+    private val newCollections: List<Collection>
+) : DiffUtil.Callback() {
+    override fun getOldListSize(): Int = oldCollections.size
+
+    override fun getNewListSize(): Int = newCollections.size
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldCollections[oldItemPosition].name == newCollections[newItemPosition].name
+    }
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldCollections[oldItemPosition] == newCollections[newItemPosition]
     }
 }

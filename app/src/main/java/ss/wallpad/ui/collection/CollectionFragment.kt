@@ -6,9 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.bumptech.glide.Glide
@@ -16,24 +16,22 @@ import kotlinx.android.synthetic.main.collection_fragment.*
 import ss.wallpad.Injectable
 import ss.wallpad.R
 import ss.wallpad.data.Status
-import ss.wallpad.data.model.Collection
 import ss.wallpad.testing.OpenForTesting
 import ss.wallpad.util.SingleVisibleViewGrouping
 import ss.wallpad.widget.VerticalGridMarginItemDecoration
 import javax.inject.Inject
 
-const val SPAN_COUNT_PORTRAIT = 2
-const val SPAN_COUNT_LANDSCAPE = 4
+private const val SPAN_COUNT_PORTRAIT = 2
+private const val SPAN_COUNT_LANDSCAPE = 4
 
 @OpenForTesting
 class CollectionFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val collectionViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory)
-            .get(CollectionViewModel::class.java)
-    }
+    private val collectionViewModel: CollectionViewModel by viewModels(factoryProducer = { viewModelFactory })
+
+    private lateinit var collectionAdapter: CollectionAdapter
 
     private lateinit var viewGrouping: SingleVisibleViewGrouping
 
@@ -47,6 +45,12 @@ class CollectionFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        collectionAdapter = CollectionAdapter(
+            requestManager = Glide.with(this),
+            callback = { collection ->
+                navController().navigate(CollectionFragmentDirections.openGallery(collection.name))
+            }
+        )
         setupRecyclerView()
         viewGrouping = SingleVisibleViewGrouping(
             setOf(progress_bar, collection_recycler_view, error_text, empty_text)
@@ -55,7 +59,7 @@ class CollectionFragment : Fragment(), Injectable {
 
     override fun onStart() {
         super.onStart()
-        collectionViewModel.collections.observe(this, Observer { resource ->
+        collectionViewModel.collections.observe(this) { resource ->
             when (resource.status) {
                 Status.ERROR -> viewGrouping.setVisible(error_text)
                 Status.LOADING -> viewGrouping.setVisible(progress_bar)
@@ -65,20 +69,21 @@ class CollectionFragment : Fragment(), Injectable {
                         viewGrouping.setVisible(empty_text)
                     } else {
                         viewGrouping.setVisible(collection_recycler_view)
-                        collection_recycler_view.adapter = getAdapter(collections)
                     }
+                    collectionAdapter.replaceCollections(collections)
                 }
             }
-        })
+        }
     }
 
     private fun setupRecyclerView() {
-        val collectionLayoutManager = GridLayoutManager(context, SPAN_COUNT_PORTRAIT)
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            collectionLayoutManager.spanCount = SPAN_COUNT_LANDSCAPE
-        } else {
-            collectionLayoutManager.spanCount = SPAN_COUNT_PORTRAIT
+        val collectionLayoutManager = GridLayoutManager(context, SPAN_COUNT_PORTRAIT).apply {
+            val orientation = resources.configuration.orientation
+            spanCount = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                SPAN_COUNT_LANDSCAPE
+            } else {
+                SPAN_COUNT_PORTRAIT
+            }
         }
         with(collection_recycler_view) {
             setHasFixedSize(true)
@@ -89,13 +94,8 @@ class CollectionFragment : Fragment(), Injectable {
                     resources.getDimensionPixelSize(R.dimen.collection_content_inset)
                 )
             )
+            adapter = collectionAdapter
         }
-    }
-
-    private fun getAdapter(collections: List<Collection>) = CollectionAdapter(
-        Glide.with(this), collections
-    ) { collection ->
-        navController().navigate(CollectionFragmentDirections.openGallery(collection.name))
     }
 
     /**

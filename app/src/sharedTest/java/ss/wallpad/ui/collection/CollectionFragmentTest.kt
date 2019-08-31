@@ -116,7 +116,7 @@ class CollectionFragmentTest {
         onView(withId(R.id.empty_text)).check(matches(not(isDisplayed())))
         onView(withId(R.id.error_text)).check(matches(not(isDisplayed())))
 
-        onView(withId(R.id.collection_recycler_view)).check(matches(hasItemCount(8)))
+        onView(withId(R.id.collection_recycler_view)).check(matches(hasItemCount(testCollections.size)))
         testCollections.forEachIndexed { index, collection ->
             onView(withId(R.id.collection_recycler_view))
                 .perform(scrollToPosition<RecyclerView.ViewHolder>(index))

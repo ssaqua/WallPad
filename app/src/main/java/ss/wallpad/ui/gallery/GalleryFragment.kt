@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnPreDraw
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.gallery_fragment.*
 import ss.wallpad.Injectable
 import ss.wallpad.R
 import ss.wallpad.data.Status
-import ss.wallpad.data.model.Image
 import ss.wallpad.testing.OpenForTesting
 import ss.wallpad.util.SingleVisibleViewGrouping
 import ss.wallpad.widget.VerticalGridMarginItemDecoration
@@ -35,12 +34,13 @@ class GalleryFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val galleryViewModel by lazy {
-        ViewModelProviders.of(this, viewModelFactory)
-            .get(GalleryViewModel::class.java)
-    }
+    private val galleryViewModel: GalleryViewModel by viewModels(
+        factoryProducer = { viewModelFactory }
+    )
 
-    private val params by navArgs<GalleryFragmentArgs>()
+    private val params: GalleryFragmentArgs by navArgs()
+
+    private lateinit var imageAdapter: ImageAdapter
 
     private lateinit var viewGrouping: SingleVisibleViewGrouping
 
@@ -54,23 +54,36 @@ class GalleryFragment : Fragment(), Injectable {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewGrouping = SingleVisibleViewGrouping(
+            setOf(progress_bar, gallery_recycler_view, error_text, empty_text)
+        )
         // allow re-entry shared element return transition to work correctly without being re-ordered
         reenterTransition?.let {
             postponeEnterTransition()
             view.doOnPreDraw { startPostponedEnterTransition() }
         }
-        setupRecyclerView()
-        galleryViewModel.setQuery(params.query)
         exitTransition = TransitionInflater.from(context)
             .inflateTransition(R.transition.gallery_exit_transition)
+        imageAdapter = ImageAdapter(
+            requestManager = Glide.with(this),
+            callback = { imageView, image ->
+                // for reference: IllegalArgumentException navigation destination ___ is unknown to this NavController
+                // workaround for common issue with navigation component where currentDestination
+                // gets a delayed update, not really an elegant solution here...
+                ViewCompat.setTransitionName(imageView, image.imageId)
+                navController().navigate(
+                    GalleryFragmentDirections.photoViewer(image),
+                    FragmentNavigatorExtras(imageView to image.imageId)
+                )
+            }
+        )
+        setupRecyclerView()
+        galleryViewModel.setQuery(params.query)
     }
 
     override fun onStart() {
         super.onStart()
-        viewGrouping = SingleVisibleViewGrouping(
-            setOf(progress_bar, gallery_recycler_view, error_text, empty_text)
-        )
-        galleryViewModel.images.observe(this, Observer { resource ->
+        galleryViewModel.images.observe(this) { resource ->
             when (resource.status) {
                 Status.ERROR -> viewGrouping.setVisible(error_text)
                 Status.LOADING -> viewGrouping.setVisible(progress_bar)
@@ -80,20 +93,21 @@ class GalleryFragment : Fragment(), Injectable {
                         viewGrouping.setVisible(empty_text)
                     } else {
                         viewGrouping.setVisible(gallery_recycler_view)
-                        gallery_recycler_view.adapter = getAdapter(images)
+                        imageAdapter.replaceImages(images)
                     }
                 }
             }
-        })
+        }
     }
 
     private fun setupRecyclerView() {
-        val galleryLayoutManager = GridLayoutManager(context, SPAN_COUNT_PORTRAIT)
-        val orientation = resources.configuration.orientation
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            galleryLayoutManager.spanCount = SPAN_COUNT_LANDSCAPE
-        } else {
-            galleryLayoutManager.spanCount = SPAN_COUNT_PORTRAIT
+        val galleryLayoutManager = GridLayoutManager(context, SPAN_COUNT_PORTRAIT).apply {
+            val orientation = resources.configuration.orientation
+            spanCount = if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                SPAN_COUNT_LANDSCAPE
+            } else {
+                SPAN_COUNT_PORTRAIT
+            }
         }
         with(gallery_recycler_view) {
             setHasFixedSize(true)
@@ -104,21 +118,7 @@ class GalleryFragment : Fragment(), Injectable {
                     resources.getDimensionPixelSize(R.dimen.gallery_content_inset)
                 )
             )
-        }
-    }
-
-    private fun getAdapter(images: List<Image>) = ImageAdapter(
-        Glide.with(this), images
-    ) { imageView, image ->
-        // for reference: IllegalArgumentException navigation destination ___ is unknown to this NavController
-        // workaround for common issue with navigation component where currentDestination
-        // gets a delayed update, not really an elegant solution here...
-        if (navController().currentDestination?.id == R.id.galleryFragment) {
-            ViewCompat.setTransitionName(imageView, image.imageId)
-            navController().navigate(
-                GalleryFragmentDirections.photoViewer(image),
-                FragmentNavigatorExtras(imageView to image.imageId)
-            )
+            adapter = imageAdapter
         }
     }
 

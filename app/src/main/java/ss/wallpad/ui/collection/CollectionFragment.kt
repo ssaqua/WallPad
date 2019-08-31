@@ -29,7 +29,9 @@ class CollectionFragment : Fragment(), Injectable {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val collectionViewModel: CollectionViewModel by viewModels(factoryProducer = { viewModelFactory })
+    private val collectionViewModel: CollectionViewModel by viewModels(
+        factoryProducer = { viewModelFactory }
+    )
 
     private lateinit var collectionAdapter: CollectionAdapter
 

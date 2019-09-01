@@ -58,7 +58,7 @@ class SavedFragment : Fragment(), Injectable {
             view.doOnPreDraw { startPostponedEnterTransition() }
         }
         exitTransition = TransitionInflater.from(context)
-            .inflateTransition(R.transition.gallery_exit_transition)
+            .inflateTransition(R.transition.saved_exit_transition)
         imageAdapter = ImageAdapter(
             requestManager = Glide.with(this),
             callback = { imageView, image ->

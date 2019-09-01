@@ -2,9 +2,11 @@
 
 <h4 align="center">Android app for discovering new wallpapers for your device powered by the Bing Image Search API</h4>
 
-A simple but non-trival demo application showcasing usage of some Android Architecture Components and testing techniques.
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/5179255/64467040-28ee7c00-d169-11e9-9ca1-c4b5b50bbe64.gif" height="480">
+</p>
 
-<img src="https://user-images.githubusercontent.com/5179255/64071719-2ce74d80-ccd4-11e9-950a-27b97dcaec04.gif" height="480"/>
+A simple but non-trival demo application showcasing usage of some Android Architecture Components and testing techniques.
 
 ## Development
 

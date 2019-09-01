@@ -89,6 +89,7 @@ class PhotoViewerFragment : Fragment(), Injectable {
             .into(object : CustomViewTarget<ImageView, Bitmap>(photo_view) {
                 override fun onLoadFailed(errorDrawable: Drawable?) {
                     Toast.makeText(context, R.string.toast_photo_viewer_load_failure, Toast.LENGTH_LONG).show()
+                    startPostponedEnterTransition()
                 }
 
                 override fun onResourceCleared(placeholder: Drawable?) {
@@ -106,11 +107,8 @@ class PhotoViewerFragment : Fragment(), Injectable {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-        if (params.inflateSavedMenu) {
-            inflater.inflate(R.menu.photo_viewer_saved_menu, menu)
-        } else {
-            inflater.inflate(R.menu.photo_viewer_menu, menu)
-        }
+        val menuRes = if (params.inflateSavedMenu) R.menu.photo_viewer_saved_menu else R.menu.photo_viewer_menu
+        inflater.inflate(menuRes, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

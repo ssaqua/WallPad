@@ -46,7 +46,6 @@ class CollectionRepository @Inject constructor(
                 ) {
                     val value = response.body() ?: emptyList()
                     if (value.isNotEmpty()) cache.put(value)
-                    data.value = Resource(Status.SUCCESS, value)
                     data.postValue(Resource(Status.SUCCESS, value))
                 }
             })

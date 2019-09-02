@@ -23,7 +23,11 @@ android {
     }
 
     def keys = new Properties()
-    rootProject.file('keys.properties').withInputStream { stream -> keys.load(stream) }
+    def keysFile = rootProject.file('keys.properties')
+    if (!keysFile.exists()) {
+        new File(keysFile.getPath()).text = "bingDebugKey=\"YOUR_DEBUG_KEY\"\nbingReleaseKey=\"YOUR_RELEASE_KEY\""
+    }
+    keysFile.withInputStream { stream -> keys.load(stream) }
 
     buildTypes {
         debug {

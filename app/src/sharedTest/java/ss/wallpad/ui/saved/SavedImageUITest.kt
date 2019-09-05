@@ -7,17 +7,22 @@ import org.junit.After
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.`when`
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.LooperMode
 import retrofit2.mock.Calls
+import ss.wallpad.DaggerTest
+import ss.wallpad.TestApplication
 import ss.wallpad.data.model.Collection
 import ss.wallpad.data.model.Image
 import ss.wallpad.data.model.Images
-import ss.wallpad.ui.DaggerTest
 import ss.wallpad.ui.MainActivity
 import ss.wallpad.ui.collection.collection
 import ss.wallpad.ui.gallery.gallery
 import ss.wallpad.ui.photoviewer.photoViewer
 
 @RunWith(AndroidJUnit4::class)
+@Config(application = TestApplication::class)
+@LooperMode(LooperMode.Mode.PAUSED)
 class SavedImageUITest : DaggerTest() {
     val mockCollectionService = testAppComponent.mockCollectionService()
     val testCollections = listOf(

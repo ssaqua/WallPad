@@ -1,4 +1,4 @@
-package ss.wallpad.ui
+package ss.wallpad
 
 import androidx.test.core.app.ApplicationProvider
 import ss.wallpad.DaggerTestAppComponent

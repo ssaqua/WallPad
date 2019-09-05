@@ -18,7 +18,7 @@ class JsonFileSavedImageStore(
     override fun get(): List<Image> {
         val list: MutableList<Image> = mutableListOf()
         if (directory.exists()) {
-            directory.listFiles { file -> file.extension == "json" }.forEach { file ->
+            directory.listFiles { file -> file.extension == "json" }.sorted().forEach { file ->
                 try {
                     val bufferedReader = file.bufferedReader()
                     val jsonString = bufferedReader.use { it.readText() }

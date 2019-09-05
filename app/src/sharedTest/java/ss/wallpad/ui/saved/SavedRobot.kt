@@ -19,6 +19,10 @@ import ss.wallpad.espresso.matcher.hasTransitionName
 import ss.wallpad.ui.BottomNavigation
 
 class SavedRobot : BottomNavigation {
+    init {
+        onView(withId(R.id.saved_fragment_root)).check(matches(isDisplayed()))
+    }
+
     fun isEmpty() {
         onView(withId(R.id.empty_text)).check(matches(isDisplayed()))
         onView(withId(R.id.saved_recycler_view)).check(matches(not(isDisplayed())))

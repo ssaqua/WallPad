@@ -35,7 +35,8 @@ android {
             buildConfigField 'String', 'SUBSCRIPTION_KEY', keys['bingDebugKey']
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             buildConfigField 'String', 'SUBSCRIPTION_KEY', keys['bingReleaseKey']
         }

@@ -18,9 +18,10 @@ import ss.wallpad.espresso.matcher.hasItemCount
 import ss.wallpad.espresso.matcher.hasTransitionName
 import ss.wallpad.ui.BottomNavigation
 
-class SavedRobot : BottomNavigation {
+class SavedRobot(block: SavedRobot.() -> Unit): BottomNavigation {
     init {
         onView(withId(R.id.saved_fragment_root)).check(matches(isDisplayed()))
+        block()
     }
 
     fun isEmpty() {

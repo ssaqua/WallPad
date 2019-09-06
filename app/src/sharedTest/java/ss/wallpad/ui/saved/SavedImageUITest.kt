@@ -16,9 +16,9 @@ import ss.wallpad.data.model.Collection
 import ss.wallpad.data.model.Image
 import ss.wallpad.data.model.Images
 import ss.wallpad.ui.MainActivity
-import ss.wallpad.ui.collection.collection
-import ss.wallpad.ui.gallery.gallery
-import ss.wallpad.ui.photoviewer.photoViewer
+import ss.wallpad.ui.collection.CollectionRobot
+import ss.wallpad.ui.gallery.GalleryRobot
+import ss.wallpad.ui.photoviewer.PhotoViewerRobot
 
 @RunWith(AndroidJUnit4::class)
 @Config(application = TestApplication::class)
@@ -56,19 +56,25 @@ class SavedImageUITest : DaggerTest() {
         `when`(mockBingImageSearchService.search("mock_1")).thenReturn(Calls.response(testImages))
         scenario = launchActivity()
 
-        collection {
-
-        } saved {
+        CollectionRobot {
+            navToSaved()
+        }
+        SavedRobot {
             isEmpty()
-        } collection {
+            navToCollections()
+        }
+        CollectionRobot {
             enterCollection(testCollections.first())
         }
-        gallery {
+        GalleryRobot {
             enterImageAtIndex(0)
         }
-        photoViewer {
+        PhotoViewerRobot {
+            hasPhotoWithId(testImages.value.first().imageId)
             save()
-        } saved {
+            navToSaved()
+        }
+        SavedRobot {
             hasSavedImages(testImages.value.first())
         }
     }
@@ -87,21 +93,26 @@ class SavedImageUITest : DaggerTest() {
         testImages.value.forEach { savedImageStore.put(it) }
         scenario = launchActivity()
 
-        collection {
-
-        } saved {
+        CollectionRobot {
+            navToSaved()
+        }
+        SavedRobot {
             hasSavedImages(testImages.value[0], testImages.value[1])
             enterImageAtIndex(0)
         }
-        photoViewer {
-
-        } delete {
+        PhotoViewerRobot {
+            hasPhotoWithId(testImages.value[0].imageId)
+            delete()
+        }
+        SavedRobot {
             hasSavedImages(testImages.value[1])
             enterImageAtIndex(0)
         }
-        photoViewer {
-
-        } delete {
+        PhotoViewerRobot {
+            hasPhotoWithId(testImages.value[1].imageId)
+            delete()
+        }
+        SavedRobot {
             isEmpty()
         }
     }

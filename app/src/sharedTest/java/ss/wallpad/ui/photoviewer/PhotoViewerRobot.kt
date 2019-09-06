@@ -6,22 +6,24 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import ss.wallpad.R
+import ss.wallpad.espresso.matcher.hasTransitionName
 import ss.wallpad.ui.BottomNavigation
-import ss.wallpad.ui.saved.SavedRobot
 
-fun photoViewer(block: PhotoViewerRobot.() -> Unit) = PhotoViewerRobot().apply(block)
-
-class PhotoViewerRobot : BottomNavigation {
+class PhotoViewerRobot(block: PhotoViewerRobot.() -> Unit) : BottomNavigation {
     init {
         onView(withId(R.id.photo_viewer_background)).check(matches(isDisplayed()))
+        block()
+    }
+
+    fun hasPhotoWithId(id: String) {
+        onView(withId(R.id.photo_view)).check(matches(hasTransitionName(id)))
     }
 
     fun save() {
         onView(withId(R.id.action_save)).perform(click())
     }
 
-    infix fun delete(block: SavedRobot.() -> Unit): SavedRobot {
+    fun delete() {
         onView(withId(R.id.action_delete)).perform(click())
-        return SavedRobot().apply(block)
     }
 }

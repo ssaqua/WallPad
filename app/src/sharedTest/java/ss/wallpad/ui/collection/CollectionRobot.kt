@@ -13,11 +13,10 @@ import ss.wallpad.R
 import ss.wallpad.data.model.Collection
 import ss.wallpad.ui.BottomNavigation
 
-fun collection(block: CollectionRobot.() -> Unit) = CollectionRobot().apply(block)
-
-class CollectionRobot : BottomNavigation {
+class CollectionRobot(block: CollectionRobot.() -> Unit) : BottomNavigation {
     init {
         onView(withId(R.id.collection_fragment_root)).check(matches(isDisplayed()))
+        block()
     }
 
     fun enterCollection(collection: Collection) {

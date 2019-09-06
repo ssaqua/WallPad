@@ -10,11 +10,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import ss.wallpad.R
 import ss.wallpad.ui.BottomNavigation
 
-fun gallery(block: GalleryRobot.() -> Unit) = GalleryRobot().apply(block)
-
-class GalleryRobot : BottomNavigation {
+class GalleryRobot(block: GalleryRobot.() -> Unit): BottomNavigation {
     init {
         onView(withId(R.id.gallery_fragment_root)).check(matches(isDisplayed()))
+        block()
     }
 
     fun enterImageAtIndex(index: Int) {

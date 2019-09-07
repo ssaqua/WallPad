@@ -1,0 +1,42 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/android:api-28
+    steps:
+      - checkout
+      - restore_cache:
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - run: ./gradlew androidDependencies
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - run: ./gradlew lint testDebug
+      - store_artifacts:
+          path: app/build/reports
+          destination: reports
+      - run: |
+          mkdir -p ~/test-results/junit
+          find app/build/test-results -type f -regex .*xml -exec cp {} ~/test-results/junit \;
+      - run: |
+          ./gradlew :app:assembleDebug :app:assembleDebugAndroidTest
+          echo $GCLOUD_SERVICE_KEY | base64 -di > ${HOME}/gcloud-service-key.json
+          gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json
+          gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+          gcloud firebase test android run \
+            --type instrumentation \
+            --app ./app/build/outputs/apk/debug/app-debug.apk \
+            --test ./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
+            --device model=Pixel2,version=28,locale=en,orientation=portrait \
+            --use-orchestrator \
+            --results-bucket cloud-test-${GOOGLE_PROJECT_ID}
+          mkdir cloud-test
+          gsutil -m cp -r -U `gsutil ls gs://cloud-test-${GOOGLE_PROJECT_ID} | tail -1` cloud-test | true
+      - store_artifacts:
+          path: cloud-test
+          destination: firebase
+      - run: |
+          find cloud-test -type f -regex .*xml -exec cp {} ~/test-results/junit \;
+      - store_test_results:
+          path: ~/test-results

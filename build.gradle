@@ -1,16 +1,16 @@
-buildscript {
-    ext.kotlin_version = '1.3.50'
+import dependencies.Deps
 
+buildscript {
     repositories {
         google()
         jcenter()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlin_version"
-        classpath 'androidx.navigation:navigation-safe-args-gradle-plugin:2.0.0'
+        classpath Deps.GradlePlugin.android
+        classpath Deps.GradlePlugin.kotlin
+        classpath Deps.GradlePlugin.kotlinAllOpen
+        classpath Deps.GradlePlugin.navigationSafeArgs
     }
 }
 

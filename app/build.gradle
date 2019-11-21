@@ -1,3 +1,5 @@
+import dependencies.Deps
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -65,58 +67,58 @@ androidExtensions {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation Deps.Kotlin.stdlib
 
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0-alpha03'
-    kapt 'androidx.lifecycle:lifecycle-compiler:2.2.0-alpha03'
-    implementation 'androidx.navigation:navigation-runtime-ktx:2.2.0-alpha01'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.2.0-alpha01'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.2.0-alpha01'
+    implementation Deps.AndroidX.appcompat
+    implementation Deps.AndroidX.coreKtx
+    implementation Deps.AndroidX.lifecycleExtensions
+    kapt Deps.AndroidX.lifecycleCompiler
+    implementation Deps.AndroidX.navigationRuntimeKtx
+    implementation Deps.AndroidX.navigationFragmentKtx
+    implementation Deps.AndroidX.navigationUiKtx
 
-    implementation 'com.github.bumptech.glide:annotations:4.9.0'
-    implementation 'com.github.bumptech.glide:glide:4.9.0'
-    implementation 'com.github.bumptech.glide:okhttp3-integration:4.9.0'
-    kapt 'com.github.bumptech.glide:compiler:4.9.0'
+    implementation Deps.Glide.glide
+    implementation Deps.Glide.annotations
+    implementation Deps.Glide.okhttp3Integration
+    kapt Deps.Glide.compiler
 
-    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
+    implementation Deps.photoView
 
-    implementation 'com.google.dagger:dagger:2.23.2'
-    kapt 'com.google.dagger:dagger-compiler:2.23.2'
-    kaptTest 'com.google.dagger:dagger-compiler:2.23.2'
-    kaptAndroidTest 'com.google.dagger:dagger-compiler:2.23.2'
-    implementation 'com.google.dagger:dagger-android:2.23.2'
-    implementation 'com.google.dagger:dagger-android-support:2.23.2'
-    kapt 'com.google.dagger:dagger-android-processor:2.23.2'
-    kaptTest 'com.google.dagger:dagger-android-processor:2.23.2'
-    kaptAndroidTest 'com.google.dagger:dagger-android-processor:2.23.2'
+    implementation Deps.Dagger.dagger
+    kapt Deps.Dagger.compiler
+    kaptTest Deps.Dagger.compiler
+    kaptAndroidTest Deps.Dagger.compiler
+    implementation Deps.Dagger.android
+    implementation Deps.Dagger.androidSupport
+    kapt Deps.Dagger.androidProcessor
+    kaptTest Deps.Dagger.androidProcessor
+    kaptAndroidTest Deps.Dagger.androidProcessor
 
-    implementation 'com.squareup.retrofit2:retrofit:2.6.1'
-    implementation 'com.squareup.retrofit2:converter-moshi:2.6.1'
+    implementation Deps.Retrofit.retrofit
+    implementation Deps.Retrofit.converterMoshi
 
-    implementation 'com.squareup.moshi:moshi:1.8.0'
+    implementation Deps.moshi
 
-    debugImplementation 'androidx.fragment:fragment-testing:1.2.0-alpha02'
-    debugImplementation 'androidx.test:core-ktx:1.2.0'
+    debugImplementation Deps.Test.fragmentTesting
+    debugImplementation Deps.Test.coreKtx
 
-    testImplementation 'androidx.arch.core:core-testing:2.0.1'
-    testImplementation 'androidx.test.ext:junit:1.1.1'
-    testImplementation 'androidx.test:runner:1.2.0'
-    testImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    testImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'com.squareup.retrofit2:retrofit-mock:2.6.1'
-    testImplementation 'org.mockito:mockito-core:2.27.0'
-    testImplementation 'org.robolectric:robolectric:4.3'
-    testImplementation 'org.robolectric:annotations:4.3'
+    testImplementation Deps.Test.archCoreTesting
+    testImplementation Deps.Test.androidJunit
+    testImplementation Deps.Test.runner
+    testImplementation Deps.Test.espressoCore
+    testImplementation Deps.Test.espressoContrib
+    testImplementation Deps.Test.junit
+    testImplementation Deps.Retrofit.retrofitMock
+    testImplementation Deps.Test.mockitoCore
+    testImplementation Deps.Test.robolectric
+    testImplementation Deps.Test.robolectricAnnotations
 
-    androidTestUtil 'androidx.test:orchestrator:1.2.0'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
-    androidTestImplementation 'com.squareup.retrofit2:retrofit-mock:2.6.1'
-    androidTestImplementation 'org.mockito:mockito-android:2.27.0'
-    androidTestImplementation 'org.robolectric:annotations:4.3'
+    androidTestUtil Deps.Test.orchestrator
+    androidTestImplementation Deps.Test.androidJunit
+    androidTestImplementation Deps.Test.runner
+    androidTestImplementation Deps.Test.espressoCore
+    androidTestImplementation Deps.Test.espressoContrib
+    androidTestImplementation Deps.Retrofit.retrofitMock
+    androidTestImplementation Deps.Test.mockitoAndroid
+    androidTestImplementation Deps.Test.robolectricAnnotations
 }

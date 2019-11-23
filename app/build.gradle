@@ -55,10 +55,6 @@ android {
         unitTests.includeAndroidResources = true
         unitTests.returnDefaultValues true
     }
-
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
 }
 
 // kotlin android extensions @Parcelize support

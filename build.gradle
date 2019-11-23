@@ -24,6 +24,24 @@ allprojects {
         jcenter()
         maven { url 'https://jitpack.io' }
     }
+
+    plugins.withType(com.android.build.gradle.BasePlugin).configureEach { plugin ->
+        plugin.extension.compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach { task ->
+        task.sourceCompatibility = JavaVersion.VERSION_1_8
+        task.targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile).configureEach { task ->
+        task.kotlinOptions {
+            jvmTarget = '1.8'
+        }
+    }
 }
 
 task clean(type: Delete) {

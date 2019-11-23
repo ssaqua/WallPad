@@ -36,6 +36,7 @@ object Deps {
         val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Versions.kotlin}"
         val kotlinAllOpen = "org.jetbrains.kotlin:kotlin-allopen:${Versions.kotlin}"
         val navigationSafeArgs = "androidx.navigation:navigation-safe-args-gradle-plugin:${Versions.AndroidX.navigation}"
+        val versionsPlugin = "com.github.ben-manes:gradle-versions-plugin:0.27.0"
     }
 
     object Kotlin {

@@ -1,5 +1,7 @@
 import dependencies.Deps
 
+apply plugin: 'com.github.ben-manes.versions'
+
 buildscript {
     repositories {
         google()
@@ -11,6 +13,7 @@ buildscript {
         classpath Deps.GradlePlugin.kotlin
         classpath Deps.GradlePlugin.kotlinAllOpen
         classpath Deps.GradlePlugin.navigationSafeArgs
+        classpath Deps.GradlePlugin.versionsPlugin
     }
 }
 

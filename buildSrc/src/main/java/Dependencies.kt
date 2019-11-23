@@ -3,21 +3,21 @@
 package dependencies
 
 object Versions {
-    val kotlin = "1.3.50"
-    val glide = "4.9.0"
+    val kotlin = "1.3.60"
+    val glide = "4.10.0"
     val dagger = "2.23.2"
     val retrofit = "2.6.1"
-    val robolectric = "4.3"
-    val mockito = "2.27.0"
+    val robolectric = "4.3.1"
+    val mockito = "3.1.0"
 
     object AndroidX {
         // https://developer.android.com/jetpack/androidx/versions
-        val appcompat = "1.0.2"
-        val core = "1.0.2"
-        val lifecycle = "2.2.0-alpha03"
-        val navigation = "2.2.0-alpha01"
-        val fragment = "1.2.0-alpha02"
-        val arch = "2.0.1"
+        val appcompat = "1.1.0"
+        val core = "1.1.0"
+        val lifecycle = "2.2.0-rc02"
+        val navigation = "2.2.0-rc02"
+        val fragment = "1.2.0-rc02"
+        val arch = "2.1.0"
 
         object Test {
             // https://developer.android.com/jetpack/androidx/releases/test

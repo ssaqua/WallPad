@@ -57,9 +57,8 @@ android {
     }
 }
 
-// kotlin android extensions @Parcelize support
 androidExtensions {
-    experimental = true
+    features = ['parcelize', 'views']
 }
 
 dependencies {

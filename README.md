@@ -8,6 +8,11 @@
 
 A simple but non-trival demo application showcasing usage of some Android Architecture Components and testing techniques.
 
+### What can you learn from this project?
+
+- Shared tests capable of running as both unit tests and as on-device instrumentation tests. [Write Once, Run Everywhere Tests on Android](https://medium.com/androiddevelopers/write-once-run-everywhere-tests-on-android-88adb2ba20c5).
+- Application of [robot pattern](https://academy.realm.io/posts/kau-jake-wharton-testing-robots/) in UI tests, for example in [SavedImageUITest.kt](/app/src/sharedTest/java/ss/wallpad/ui/saved/SavedImageUITest.kt).
+
 ## Development
 
 Supply your own API keys for the [Azure Cognitive Services Search APIs](https://azure.microsoft.com/en-us/services/cognitive-services/bing-image-search-api/).
